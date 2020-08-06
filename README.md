@@ -1,7 +1,5 @@
 # 邮件发送与接收
 
-## code
-
 > form.php（提交地址，用于接收数据及邮件发送）
 
 > class.smtp.php
@@ -9,6 +7,14 @@
 > class.phpmailer.php
 
 ## 小程序提交方式
+
+```javascript
+<form bindsubmit="indexForm">
+  <input name="title" value="{{titleValue}}" placeholder="请输入邮件标题" maxlength="50" type="text" />
+  <textarea name="content" value="{{contentValue}}" placeholder="请输入发送邮件的内容" />
+  <button form-type="submit">立即提交</button>
+</form>
+```
 
 ```javascript
 indexForm: function (e) {
@@ -85,65 +91,73 @@ indexForm: function (e) {
 ## Ajax
 
 ```javascript
-$(document).ready(function() { 
-    function ajaxFn(title, content) { 
-        $.ajax({
-            url: "https://www.xxxxxx.com/form.php",
-            type: 'POST',
-            async: false,
-            "data": {
-                "title": title,
-                "content": content 
-            },
-            success: function(data) {
-                if (data === "200") {
-                    $(".phone").val("");
-                    alert("邮件发送成功");
-                } else if (data === "401") {
-                    alert("请输入邮件标题");
-                } else if (data === "402") {
-                    $(".phone").val("");
-                    alert("请输入邮件内容");
-                }
-            }
-        });
-    };
-    
-    $(".submit").off("click").on("click", function() {
-        var title = $(this).siblings(".title").val();
-        var content = $(this).siblings(".content").val(); 
-        ajaxFn(title, content);
-    }); 
-}); 
+<form>
+    <input type="text" class="title" placeholder="请输入邮件标题">
+    <input type="text" class="content" placeholder="请输入发送邮件的内容" autocomplete="off" />
+    <div class="submit"></div>
+</form>
 ```
 
 ```javascript
-$(document).ready(function() {  
-    $(".submit").off("click").on("click", function() {
-        var title = $(this).siblings(".title").val();
-        var content = $(this).siblings(".content").val(); 
-        $.ajax({
-            url: "https://www.xxxxxx.com/form.php",
-            type: 'POST',
-            async: false,
-            "data": {
-                "title": title,
-                "content": content 
-            },
-            success: function(data) {
-                if (data === "200") {
-                    $(".phone").val("");
-                    alert("邮件发送成功");
-                } else if (data === "401") {
-                    alert("请输入邮件标题");
-                } else if (data === "402") {
-                    $(".phone").val("");
-                    alert("请输入邮件内容");
-                }
-            }
-        });
+$(document).ready(function () {
+  function ajaxFn(title, content) {
+    $.ajax({
+      url: "https://www.xxxxxx.com/form.php",
+      type: "POST",
+      async: false,
+      data: {
+        title: title,
+        content: content,
+      },
+      success: function (data) {
+        if (data === "200") {
+          $(".title").val("");
+          $(".content").val("");
+          alert("邮件发送成功");
+        } else if (data === "401") {
+          alert("请输入邮件标题");
+        } else if (data === "402") {
+          alert("请输入邮件内容");
+        }
+      },
+    });
+  }
+
+  $(".submit").off("click").on("click", function () {
+      var title = $(this).siblings(".title").val();
+      var content = $(this).siblings(".content").val();
+      ajaxFn(title, content);
     });
 });
-
 ```
 
+```javascript
+$(document).ready(function () {
+  $(".submit")
+    .off("click")
+    .on("click", function () {
+      var title = $(this).siblings(".title").val();
+      var content = $(this).siblings(".content").val();
+      $.ajax({
+        url: "https://www.xxxxxx.com/form.php",
+        type: "POST",
+        async: false,
+        data: {
+          title: title,
+          content: content,
+        },
+        success: function (data) {
+          if (data === "200") {
+            $(".title").val("");
+            $(".content").val("");
+            alert("邮件发送成功");
+          } else if (data === "401") {
+            alert("请输入邮件标题");
+          } else if (data === "402") {
+            alert("请输入邮件内容");
+          }
+        },
+      });
+    });
+});
+```
